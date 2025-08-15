@@ -1,28 +1,23 @@
-﻿version: "3.9"
-
-services:
-  app:
+﻿services:
+  backend:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: php_app
+      dockerfile: Dockerfile.backend
+    container_name: backend_app
     working_dir: /var/www/html
-    volumes:
-      - type: bind
-        source: ./src
-        target: /var/www/html
-      - symfony_vendor:/var/www/html/vendor
-      - symfony_var:/var/www/html/var
     ports:
       - "8080:80"
     depends_on:
       - db
     environment:
-      # Passed into Symfony via .env or .env.local (recommended)
       POSTGRES_HOST: db
       POSTGRES_DB: app_db
       POSTGRES_USER: app_user
       POSTGRES_PASSWORD: secret
+    volumes:
+      - ./backend:/var/www/html
+      - symfony_var:/var/www/html/var
+      - symfony_vendor:/var/www/html/vendor
 
   db:
     image: postgres:16
@@ -34,10 +29,23 @@ services:
       POSTGRES_PASSWORD: secret
     volumes:
       - db_data:/var/lib/postgresql/data
+
+  frontend:
+    image: node:20-alpine
+    container_name: vue_frontend
+    working_dir: /app
+    # Vite dev server
+    command: sh -lc "corepack enable && yarn install && yarn dev --host"
     ports:
-      - "5432:5432"
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+    environment:
+      # Helpful in Docker/Windows so file changes are detected
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
 
 volumes:
-  symfony_vendor:
-  symfony_var:
   db_data:
+  symfony_var:
+  symfony_vendor:
