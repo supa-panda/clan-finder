@@ -1,0 +1,52 @@
+﻿# -----------------------------
+# Symfony / PHP
+# -----------------------------
+/vendor/
+var/
+var/*
+
+# Symfony local config
+.env.local
+.env.local.php
+.env.*.local
+
+# Logs
+*.log
+var/logs/
+var/cache/
+var/sessions/
+
+# PHPUnit
+/phpunit.xml
+/phpunit.xml.dist
+/phpunit.result.cache
+
+# -----------------------------
+# Composer
+# -----------------------------
+composer.lock
+composer.phar
+
+# -----------------------------
+# Docker
+# -----------------------------
+# Ignore any local database volumes if inside repo (though we use named volumes)
+/db_data/
+
+# -----------------------------
+# OS / Editor junk
+# -----------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# -----------------------------
+# Node / Frontend (if added later)
+# -----------------------------
+/node_modules/
+/public/build/
+/yarn.lock
+package-lock.json

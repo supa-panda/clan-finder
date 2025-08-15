@@ -2,8 +2,11 @@
 
 services:
   app:
-    image: php:8.3-apache
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: php_app
+    working_dir: /var/www/html
     volumes:
       - ./src:/var/www/html
     ports:
@@ -11,13 +14,11 @@ services:
     depends_on:
       - db
     environment:
-      - POSTGRES_HOST=db
-      - POSTGRES_DB=app_db
-      - POSTGRES_USER=app_user
-      - POSTGRES_PASSWORD=secret
-    build:
-      context: .
-      dockerfile: Dockerfile
+      # Passed into Symfony via .env or .env.local (recommended)
+      POSTGRES_HOST: db
+      POSTGRES_DB: app_db
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: secret
 
   db:
     image: postgres:16
