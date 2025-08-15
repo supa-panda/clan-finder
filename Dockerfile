@@ -49,7 +49,8 @@ RUN { \
       echo 'opcache.memory_consumption=256'; \
       echo 'opcache.interned_strings_buffer=16'; \
       echo 'opcache.max_accelerated_files=20000'; \
-      echo 'opcache.validate_timestamps=0'; \
+      echo 'opcache.validate_timestamps=1'; \
+      echo 'opcache.revalidate_freq=1'; \
       echo 'realpath_cache_size=4096K'; \
       echo 'realpath_cache_ttl=600'; \
       echo 'memory_limit=512M'; \
@@ -64,5 +65,9 @@ RUN { \
 #       echo 'xdebug.client_host=host.docker.internal'; \
 #       echo 'xdebug.start_with_request=yes'; \
 #     } > /usr/local/etc/php/conf.d/xdebug.ini
+
+COPY docker/entrypoint.sh /usr/local/bin/app-entrypoint
+RUN chmod +x /usr/local/bin/app-entrypoint
+ENTRYPOINT ["app-entrypoint"]
 
 WORKDIR /var/www/html

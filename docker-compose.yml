@@ -8,7 +8,11 @@ services:
     container_name: php_app
     working_dir: /var/www/html
     volumes:
-      - ./src:/var/www/html
+      - type: bind
+        source: ./src
+        target: /var/www/html
+      - symfony_vendor:/var/www/html/vendor
+      - symfony_var:/var/www/html/var
     ports:
       - "8080:80"
     depends_on:
@@ -32,4 +36,6 @@ services:
       - db_data:/var/lib/postgresql/data
 
 volumes:
+  symfony_vendor:
+  symfony_var:
   db_data:
